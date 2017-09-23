@@ -1,4 +1,5 @@
 import cv2
+from distutils.version import LooseVersion
 import itertools
 from numpy import array, zeros, vstack, hstack, math, nan, argsort, median, \
     argmax, isnan, append
@@ -30,7 +31,7 @@ class CMT(object):
         self.descriptor = cv2.DescriptorExtractor_create(self.DESCRIPTOR)
         self.matcher = cv2.DescriptorMatcher_create(self.MATCHER)
         '''
-        if cv2.__version__ < 3.0:
+        if cv2.__version__ < LooseVersion('3.0'):
             self.detector = cv2.FeatureDetector_create(self.DETECTOR)
             self.descriptor = cv2.DescriptorExtractor_create(self.DESCRIPTOR)
             self.matcher = cv2.DescriptorMatcher_create(self.MATCHER)
