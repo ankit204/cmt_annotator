@@ -6,11 +6,10 @@ from numpy import empty, nan
 import os
 import sys
 import time
-
+import traceback
 import CMT
 import numpy as np
 import util
-import ipdb
 import uuid
 CMT = CMT.CMT()
 
@@ -177,13 +176,16 @@ else:
         frame_id = str(uuid.uuid1())
         im_name = os.path.join(FRAMES, frame_id + '.jpg')
         try:
-            #cv2.imwrite(im_name, im[CMT.tl[1]:CMT.bl[1], CMT.tl[0]:CMT.br[0]])
-            cv2.imwrite(im_name, im)
-            with open(LABELS, 'a') as lfile:
-                lfile.write('{},{},{},{},{}\n'.format(frame_id, CMT.tl[0],
-                                                      CMT.tl[1], CMT.br[0],
-                                                      CMT.br[1]))
+            print CMT.tl, CMT.br
+            if not any(np.isnan(CMT.tl) | np.isnan(CMT.br)):
+                print '[debug]: writing labels and image'
+                cv2.imwrite(im_name, im)
+                with open(LABELS, 'a+') as lfile:
+                    lfile.write('{},{},{},{},{}\n'.format(frame_id, CMT.tl[0],
+                                                          CMT.tl[1], CMT.br[0],
+                                                          CMT.br[1]))
         except:
+            traceback.print_exc()
             print('Object not the in the frame')
         toc = time.time()
 
